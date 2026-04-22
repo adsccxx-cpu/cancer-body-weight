@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>營養風險 - 體重變化評估系統</title>
+
+<style>
+body {
+  font-family: Arial;
+  max-width: 600px;
+  margin: auto;
+  padding: 20px;
+  background: #f5f7fb;
+}
+.card {
+  background: white;
+  padding: 15px;
+  margin-top: 15px;
+  border-radius: 10px;
+}
+input, select {
+  width: 100%;
+  padding: 10px;
+  margin-top: 8px;
+  margin-bottom: 12px;
+}
+button {
+  width: 100%;
+  padding: 12px;
+  background: #1f6feb;
+  color: white;
+  border: none;
+  border-radius: 8px;
+}
+.result {
+  font-size: 16px;
+  line-height: 1.6;
+}
+</style>
+</head>
+
+<body>
+
+<h2>營養風險評估（體重變化）</h2>
+
+<div class="card">
+<label>原體重 (kg)</label>
+<input id="oldW" type="number">
+
+<label>目前體重 (kg)</label>
+<input id="newW" type="number">
+
+<label>觀察期間</label>
+<select id="period">
+  <option value="7">1週內</option>
+  <option value="30">1個月</option>
+  <option value="90">3個月</option>
+  <option value="180">6個月</option>
+</select>
+
+<button onclick="calc()">計算風險</button>
+</div>
+
+<div class="card result" id="result"></div>
+
+<script>
+function calc(){
+  let oldW = parseFloat(document.getElementById("oldW").value);
+  let newW = parseFloat(document.getElementById("newW").value);
+  let period = parseInt(document.getElementById("period").value);
+
+  if(!oldW || !newW){
+    document.getElementById("result").innerHTML = "請輸入完整數據";
+    return;
+  }
+
+  let loss = ((oldW - newW) / oldW) * 100;
+
+  let risk = "🟢 正常";
+
+  if(period == 7 && loss > 2) risk = "🔴 高風險（1週>2%）";
+  else if(period == 30 && loss > 5) risk = "🔴 高風險（1月>5%）";
+  else if(period == 90 && loss > 7.5) risk = "🟠 中度風險（3月>7.5%）";
+  else if(period == 180 && loss > 10) risk = "🔴 高風險（6月>10%）";
+  else if(loss > 2) risk = "🟡 需注意體重下降";
+
+  document.getElementById("result").innerHTML =
+    "體重下降：" + loss.toFixed(1) + "%<br><br>" +
+    "風險判讀：" + risk + "<br><br>" +
+    "建議：若持續下降，請轉介營養師評估";
+}
+</script>
+
+</body>
+</html>
