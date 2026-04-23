@@ -3,52 +3,56 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>癌症營養與症狀自我評估</title>
+    <title>照護助理 Pro</title>
     <style>
         :root {
-            --primary: #4a90e2;
-            --danger: #e74c3c;
-            --warning: #f39c12;
-            --success: #2ecc71;
-            --bg: #f5f7fa;
+            --green: #2ecc71; --orange: #f39c12; --red: #e74c3c;
+            --primary: #4a90e2; --bg: #f8f9fa;
         }
-        body { font-family: -apple-system, "Noto Sans TC", sans-serif; background: var(--bg); color: #333; margin: 0; padding: 15px; }
-        .card { background: white; border-radius: 15px; padding: 20px; margin-bottom: 15px; box-shadow: 0 2px 10px rgba(0,0,0,0.05); }
-        h2 { color: var(--primary); text-align: center; margin-bottom: 25px; }
-        h3 { border-left: 4px solid var(--primary); padding-left: 10px; font-size: 1.1rem; margin-top: 0; }
+        body { font-family: -apple-system, "Noto Sans TC", sans-serif; background: var(--bg); color: #333; margin: 0; padding: 15px; padding-bottom: 50px; }
+        .card { background: white; border-radius: 16px; padding: 20px; margin-bottom: 20px; box-shadow: 0 4px 12px rgba(0,0,0,0.08); }
+        h2 { color: var(--primary); text-align: center; font-size: 1.5rem; }
+        h3 { border-left: 5px solid var(--primary); padding-left: 12px; font-size: 1.1rem; margin-top: 0; margin-bottom: 20px; }
         
-        /* 表單元素美化 */
-        label { display: block; margin: 10px 0 5px; font-weight: bold; }
-        input[type="number"], select { width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 8px; font-size: 16px; box-sizing: border-box; }
-        
-        /* 複選框美化 */
-        .checkbox-group { display: flex; flex-direction: column; gap: 10px; }
-        .checkbox-item { background: #f9f9f9; padding: 12px; border-radius: 8px; display: flex; align-items: center; cursor: pointer; }
-        .checkbox-item input { margin-right: 12px; transform: scale(1.3); }
+        /* 體重與下拉選單 */
+        label { display: block; margin: 15px 0 5px; font-weight: bold; font-size: 0.95rem; }
+        input[type="number"], select { width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 10px; font-size: 16px; box-sizing: border-box; background: #fff; }
 
-        /* 滑桿美化 */
-        .slider-container { margin: 20px 0; }
-        input[type="range"] { width: 100%; height: 8px; border-radius: 5px; background: #ddd; outline: none; transition: 0.2s; margin: 10px 0; }
-        .slider-val { float: right; color: var(--primary); font-weight: bold; }
+        /* 副作用複選框 */
+        .checkbox-group { display: grid; grid-template-columns: 1fr; gap: 8px; }
+        .checkbox-item { background: #f1f3f5; padding: 14px; border-radius: 10px; display: flex; align-items: center; transition: 0.2s; }
+        .checkbox-item input { width: 20px; height: 20px; margin-right: 12px; accent-color: var(--primary); }
 
-        button { width: 100%; padding: 15px; background: var(--primary); color: white; border: none; border-radius: 30px; font-size: 18px; font-weight: bold; margin-top: 10px; cursor: pointer; box-shadow: 0 4px 15px rgba(74,144,226,0.3); }
+        /* 滑桿與節點設計 */
+        .slider-wrapper { margin-bottom: 30px; position: relative; }
+        .slider-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }
+        .score-display { font-size: 1.4rem; font-weight: 900; padding: 2px 10px; border-radius: 6px; }
         
-        /* 結果呈現 */
-        #result { display: none; margin-top: 20px; }
-        .risk-badge { display: inline-block; padding: 5px 15px; border-radius: 20px; color: white; font-weight: bold; margin: 10px 0; }
-        .standard-box { background: #eee; padding: 12px; border-radius: 8px; font-size: 0.85rem; color: #666; margin-top: 15px; }
+        input[type="range"] { -webkit-appearance: none; width: 100%; height: 10px; border-radius: 5px; background: #eee; outline: none; margin: 15px 0; }
+        input[type="range"]::-webkit-slider-thumb { -webkit-appearance: none; width: 24px; height: 24px; border-radius: 50%; background: #fff; border: 3px solid var(--primary); cursor: pointer; box-shadow: 0 2px 5px rgba(0,0,0,0.2); }
+        
+        .marks { display: flex; justify-content: space-between; padding: 0 5px; font-size: 0.75rem; color: #888; }
+        .sleep-labels { display: flex; justify-content: space-between; margin-top: 5px; font-size: 0.75rem; color: #666; text-align: center; }
+        .sleep-labels span { width: 20%; }
+
+        /* 按鈕與結果 */
+        button { width: 100%; padding: 16px; background: var(--primary); color: white; border: none; border-radius: 30px; font-size: 1.1rem; font-weight: bold; cursor: pointer; transition: 0.3s; }
+        #result { display: none; border-top: 8px solid var(--primary); }
+        .advice-list { padding-left: 20px; }
+        .advice-list li { margin-bottom: 12px; line-height: 1.5; }
+        .emergency-alert { background: #fff5f5; border: 1px dashed var(--red); color: var(--red); padding: 12px; border-radius: 10px; margin-top: 15px; font-weight: bold; }
     </style>
 </head>
 <body>
 
-    <h2>照護小助手</h2>
+    <h2>🌟 治療照護小助手</h2>
 
     <div class="card">
-        <h3>1. 體重變化監測</h3>
+        <h3>1. 體重監測</h3>
         <label>原始體重 (kg)</label>
-        <input id="oldW" type="number" step="0.1" placeholder="請輸入治療前體重">
+        <input id="oldW" type="number" step="0.1" placeholder="請輸入數值">
         <label>目前體重 (kg)</label>
-        <input id="newW" type="number" step="0.1" placeholder="請輸入本次測量體重">
+        <input id="newW" type="number" step="0.1" placeholder="請輸入數值">
         <label>比較時間範圍</label>
         <select id="period">
             <option value="7">一週內</option>
@@ -59,7 +63,7 @@
     </div>
 
     <div class="card">
-        <h3>2. 治療副作用（可多選）</h3>
+        <h3>2. 副作用勾選</h3>
         <div class="checkbox-group">
             <label class="checkbox-item"><input type="checkbox" value="appetite"> 食慾不振</label>
             <label class="checkbox-item"><input type="checkbox" value="dry"> 口乾</label>
@@ -69,115 +73,139 @@
             <label class="checkbox-item"><input type="checkbox" value="bloating"> 腹脹</label>
             <label class="checkbox-item"><input type="checkbox" value="diarrhea"> 腹瀉</label>
             <label class="checkbox-item"><input type="checkbox" value="constipation"> 便秘</label>
-            <label class="checkbox-item"><input type="checkbox" value="tube"> 灌食管路問題</label>
+            <label class="checkbox-item"><input type="checkbox" value="tube"> 灌食管路阻塞或滲漏</label>
         </div>
     </div>
 
     <div class="card">
-        <h3>3. 身心狀態評分 (0-10)</h3>
-        <div class="slider-container">
-            疲憊無力 <span class="slider-val" id="v-fatigue">0</span>
-            <input type="range" id="fatigue" min="0" max="10" value="0" oninput="document.getElementById('v-fatigue').innerText=this.value">
+        <h3>3. 自我身心評估</h3>
+        
+        <div class="slider-wrapper">
+            <div class="slider-header">
+                <span>疲憊無力</span>
+                <span id="txt-fatigue" class="score-display" style="color:var(--green)">1</span>
+            </div>
+            <input type="range" id="fatigue" min="1" max="10" value="1" oninput="updateSlider(this, 'txt-fatigue')">
+            <div class="marks"><span>1 (最低)</span><span>2</span><span>3</span><span>4</span><span>5</span><span>6</span><span>7</span><span>8</span><span>9</span><span>10 (最高)</span></div>
         </div>
-        <div class="slider-container">
-            疼痛程度 <span class="slider-val" id="v-pain">0</span>
-            <input type="range" id="pain" min="0" max="10" value="0" oninput="document.getElementById('v-pain').innerText=this.value">
+
+        <div class="slider-wrapper">
+            <div class="slider-header">
+                <span>疼痛程度</span>
+                <span id="txt-pain" class="score-display" style="color:var(--green)">1</span>
+            </div>
+            <input type="range" id="pain" min="1" max="10" value="1" oninput="updateSlider(this, 'txt-pain')">
+            <div class="marks"><span>1 (最低)</span><span>2</span><span>3</span><span>4</span><span>5</span><span>6</span><span>7</span><span>8</span><span>9</span><span>10 (最高)</span></div>
         </div>
-        <div class="slider-container">
-            情緒困擾 <span class="slider-val" id="v-mood">0</span>
-            <input type="range" id="mood" min="0" max="10" value="0" oninput="document.getElementById('v-mood').innerText=this.value">
+
+        <div class="slider-wrapper">
+            <div class="slider-header">
+                <span>心情溫度計 (情緒困擾)</span>
+                <span id="txt-mood" class="score-display" style="color:var(--green)">1</span>
+            </div>
+            <input type="range" id="mood" min="1" max="10" value="1" oninput="updateSlider(this, 'txt-mood')">
+            <div class="marks"><span>1 (最低)</span><span>2</span><span>3</span><span>4</span><span>5</span><span>6</span><span>7</span><span>8</span><span>9</span><span>10 (最高)</span></div>
         </div>
-        <label>睡眠品質</label>
-        <select id="sleep">
-            <option value="5">很好</option>
-            <option value="4">好</option>
-            <option value="3">普通</option>
-            <option value="2">差</option>
-            <option value="1">很差</option>
-        </select>
+
+        <div class="slider-wrapper">
+            <div class="slider-header">
+                <span>睡眠品質</span>
+                <span id="txt-sleep" class="score-display" style="color:var(--green)">很好</span>
+            </div>
+            <input type="range" id="sleep" min="1" max="5" value="5" oninput="updateSleepSlider(this)">
+            <div class="sleep-labels">
+                <span>很差</span><span>差</span><span>普通</span><span>好</span><span>很好</span>
+            </div>
+        </div>
     </div>
 
-    <button onclick="calc()">查看評估報告</button>
+    <button onclick="calc()">生成評估報告</button>
 
     <div id="result" class="card">
-        <h3 style="border-color: #2ecc71;">評估結果報告</h3>
-        <div id="summary"></div>
-        <hr>
-        <div id="detail-advice"></div>
-        
-        <div class="standard-box">
-            <b>📊 計算標準說明：</b><br>
-            • <b>高風險：</b>一週瘦 >2%、一月 >5%、六月 >10%。<br>
-            • <b>意義：</b>體重快速流失會降低免疫力與耐受力，建議優先諮詢營養師。
-        </div>
+        <h3>📋 評估報告</h3>
+        <div id="summary-text"></div>
+        <ul id="advice-list" class="advice-list"></ul>
+        <div id="emergency-notice"></div>
     </div>
 
     <script>
+    function updateSlider(el, targetId) {
+        let val = parseInt(el.value);
+        let target = document.getElementById(targetId);
+        target.innerText = val;
+        
+        if (val <= 3) { target.style.color = "var(--green)"; }
+        else if (val <= 6) { target.style.color = "var(--orange)"; }
+        else { target.style.color = "var(--red)"; }
+    }
+
+    function updateSleepSlider(el) {
+        const labels = ["", "很差", "差", "普通", "好", "很好"];
+        let val = parseInt(el.value);
+        let target = document.getElementById('txt-sleep');
+        target.innerText = labels[val];
+        
+        if (val >= 4) target.style.color = "var(--green)";
+        else if (val >= 3) target.style.color = "var(--orange)";
+        else target.style.color = "var(--red)";
+    }
+
     function calc() {
         const oldW = parseFloat(document.getElementById("oldW").value);
         const newW = parseFloat(document.getElementById("newW").value);
         const period = parseInt(document.getElementById("period").value);
         
-        if (isNaN(oldW) || isNaN(newW)) {
-            alert("請先輸入體重數值喔！");
-            return;
-        }
+        if (isNaN(oldW) || isNaN(newW)) { alert("請輸入完整體重數值"); return; }
 
         let change = ((newW - oldW) / oldW) * 100;
-        let riskText = "🟢 穩定狀態";
-        let riskColor = "#2ecc71";
         let loss = Math.abs(change);
+        let riskText = change >= 0 ? "🟢 體重穩定/增加" : "🟡 體重下降";
         let isHighRisk = false;
 
-        // 風險判定
         if (change < 0) {
             if ((period == 7 && loss > 2) || (period == 30 && loss > 5) || (period == 180 && loss > 10)) {
-                riskText = "🔴 高風險狀態";
-                riskColor = "#e74c3c";
-                isHighRisk = true;
-            } else if (loss > 2) {
-                riskText = "🟡 注意狀態";
-                riskColor = "#f39c12";
+                riskText = "🔴 高風險下降"; isHighRisk = true;
             }
         }
 
-        // 症狀建議
         const adviceMap = {
-            appetite: "建議少量多餐，補充高蛋白點心（如布丁、豆漿）。",
-            dry: "小口頻繁飲水，或使用無糖口含錠刺激唾液。",
-            mouth: "選擇軟質溫涼食物，避免辛辣、酸味或粗糙食物。",
-            taste: "嘗試使用檸檬或香料提味，或嘗試冷食改善金屬味。",
-            nausea: "避免油膩與氣味重食物，餐後不要立刻平躺。",
-            bloating: "減少產氣食物（如豆類、洋蔥），放慢進食速度。",
-            diarrhea: "採低纖飲食（如白米、吐司），注意補充電解質水。",
-            constipation: "在體力許可下增加水分攝取與散步運動。",
-            tube: "請檢查管路有無折損，若有滲漏請聯繫醫護。"
+            appetite: "<b>食慾不振：</b>少量多餐，挑選高熱量高蛋白食物，如豆漿、奶昔。",
+            dry: "<b>口乾：</b>小口頻繁喝水，或含冰塊、無糖糖果刺激分泌。",
+            mouth: "<b>口腔潰瘍：</b>選溫涼軟質食物，避免刺激性（酸辣鹹）食物。",
+            taste: "<b>味覺改變：</b>可嘗試不同調味料提味，或改用木質餐具減少金屬味。",
+            nausea: "<b>噁心嘔吐：</b>避免重口味食物，進食後一小時不平躺。",
+            bloating: "<b>腹脹：</b>避開產氣食物（豆、瓜、碳酸飲），餐後適度散步。",
+            diarrhea: "<b>腹瀉：</b>採取低纖飲食，補充電解質與水分。",
+            constipation: "<b>便秘：</b>增加水分與纖維攝取，規律活動。",
+            tube: "<b>管路問題：</b>檢查有無彎折，若有滲漏請務必通報醫療團隊。"
         };
 
         let adviceHtml = "";
-        let checked = document.querySelectorAll('input[type="checkbox"]:checked');
-        checked.forEach(item => {
-            adviceHtml += `<li><b>${item.parentElement.innerText.trim()}：</b>${adviceMap[item.value]}</li>`;
+        document.querySelectorAll('input[type="checkbox"]:checked').forEach(i => {
+            adviceHtml += `<li>${adviceMap[i.value]}</li>`;
         });
 
-        // 拉條數值
-        let fatigue = parseInt(document.getElementById("fatigue").value);
-        let pain = parseInt(document.getElementById("pain").value);
-        let mood = parseInt(document.getElementById("mood").value);
-        
-        if (fatigue >= 7) adviceHtml += "<li>⚠️ <b>疲憊感重：</b>建議增加午間歇息，並與醫師討論貧血可能。</li>";
-        if (pain >= 7) adviceHtml += "<li>⚠️ <b>疼痛明顯：</b>請記錄疼痛性質，並按時服用醫師開立藥物。</li>";
-        if (isHighRisk) {
-            adviceHtml += "<li style='color:#e74c3c;'>🚨 <b>體重流失過快建議：</b>建議主動聯繫營養師，評估是否需搭配營養補充品。</li>";
-        }
+        // 處置量表建議
+        let f = parseInt(document.getElementById("fatigue").value);
+        let p = parseInt(document.getElementById("pain").value);
+        let m = parseInt(document.getElementById("mood").value);
+        let s = parseInt(document.getElementById("sleep").value);
 
-        // 顯示結果
-        document.getElementById("summary").innerHTML = `
-            體重變化：<span style="font-size:1.2rem; font-weight:bold;">${change.toFixed(1)}%</span><br>
-            判定結果：<span class="risk-badge" style="background:${riskColor}">${riskText}</span>
-        `;
-        document.getElementById("detail-advice").innerHTML = adviceHtml ? `<b>建議對策：</b><ul>${adviceHtml}</ul>` : "目前狀態良好，請繼續保持！";
+        if (f >= 4) adviceHtml += `<li><b>疲憊建議：</b>${f >= 7 ? '<span style="color:var(--red)">高度疲憊，請務必主動聯繫醫護個管師。</span>' : '調整活動與休息比例，少量多次運動。'}</li>`;
+        if (p >= 4) adviceHtml += `<li><b>疼痛建議：</b>${p >= 7 ? '<span style="color:var(--red)">疼痛已影響生活，請告知醫護調整止痛處方。</span>' : '記錄疼痛頻率與時間，依醫師指示服藥。'}</li>`;
+        if (m >= 4) adviceHtml += `<li><b>情緒建議：</b>${m >= 7 ? '<span style="color:var(--red)">情緒負擔重，建議尋求個管師轉介心理師或團隊關懷。</span>' : '可與親友傾訴或進行簡單放鬆練習。'}</li>`;
+        if (s <= 3) adviceHtml += `<li><b>睡眠建議：</b>${s <= 2 ? '<span style="color:var(--red)">睡眠品質極差，建議告知醫師評估睡眠輔助藥物。</span>' : '建立固定睡前儀式，減少睡前藍光接觸。'}</li>`;
+
+        document.getElementById("summary-text").innerHTML = `體重變化：<b>${change.toFixed(1)}%</b> (${riskText})`;
+        document.getElementById("advice-list").innerHTML = adviceHtml;
         
+        let emergency = "";
+        if (isHighRisk) emergency += "<li>🚨 體重流失達高風險，建議諮詢營養師。</li>";
+        if (document.querySelector('input[value="nausea"]:checked') || document.querySelector('input[value="diarrhea"]:checked')) {
+            emergency += "<li>🚨 頻繁嘔吐或腹瀉可能導致脫水，請立即諮詢醫療團隊。</li>";
+        }
+        document.getElementById("emergency-notice").innerHTML = emergency ? `<div class="emergency-alert"><b>【重要警示】</b><ul style="margin:5px 0; padding-left:18px;">${emergency}</ul></div>` : "";
+
         document.getElementById("result").style.display = "block";
         window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });
     }
