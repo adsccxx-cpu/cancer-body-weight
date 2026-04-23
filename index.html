@@ -56,23 +56,10 @@
             border-radius: 10px;
         }
 
-        /* 輸入框美化 */
-label { display: block; margin-bottom: 8px; font-weight: 600; font-size: 0.95rem; color: var(--text-gray); }
-
-input[type="number"], select { 
-    width: 100%; 
-    padding: 14px; 
-    border: 2px solid #e9ecef; 
-    border-radius: 12px; 
-    font-size: 16px; 
-    transition: all 0.3s;
-    background-color: #f8f9fa;
-    /* --- 關鍵修改：加入下面這行 --- */
-    box-sizing: border-box; 
-}
-
-input:focus { border-color: var(--primary); background-color: #fff; outline: none; }
-
+                /* 體重與下拉選單 */
+        label { display: block; margin: 15px 0 5px; font-weight: bold; font-size: 0.95rem; }
+        input[type="number"], select { width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 10px; font-size: 16px; box-sizing: border-box; background: #fff; }
+        
         /* 副作用複選框色塊化 */
         .checkbox-grid { display: grid; grid-template-columns: 1fr; gap: 10px; }
         .checkbox-item { 
@@ -88,86 +75,17 @@ input:focus { border-color: var(--primary); background-color: #fff; outline: non
         .checkbox-item:active { background: var(--primary-light); }
         .checkbox-item input { width: 22px; height: 22px; margin-right: 15px; accent-color: var(--primary); }
 
-        /* 拉條區塊 */
-           /* 強化拉條節點美化 */
-    .slider-wrapper {
-        margin-bottom: 45px;
-        padding: 0 5px;
-    }
-    
-    .slider-header {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        margin-bottom: 12px;
-    }
-
-    .score-badge {
-        font-size: 1.6rem;
-        font-weight: 800;
-        padding: 4px 12px;
-        border-radius: 10px;
-        background: #f8f9fa;
-        min-width: 45px;
-        text-align: center;
-        box-shadow: inset 0 2px 4px rgba(0,0,0,0.05);
-    }
-
-    /* 數字節點刻度列 */
- /* 1. 重置拉條基礎外觀 */
-input[type="range"] {
-    -webkit-appearance: none; /* 移除 iOS 預設樣式 */
-    width: 100%;
-    background: #e9ecef; /* 未填充時的背景顏色 */
-    height: 8px;
-    border-radius: 10px;
-    outline: none;
-    margin: 20px 0; /* 增加上下間距，避免跟標題太近 */
-}
-
-/* 2. 移除 Safari 滑動時產生的藍色條 (非常重要) */
-input[type="range"]::-webkit-slider-runnable-track {
-    background: #e9ecef; /* 確保軌道背景顏色固定 */
-    height: 8px;
-    border-radius: 10px;
-}
-
-/* 3. 美化滑動圓鈕 (Thumb) */
-input[type="range"]::-webkit-slider-thumb {
-    -webkit-appearance: none;
-    appearance: none;
-    width: 26px;
-    height: 26px;
-    background: #ffffff;
-    border: 3px solid var(--primary); /* 使用您的主色調 */
-    border-radius: 50%;
-    cursor: pointer;
-    box-shadow: 0 2px 6px rgba(0,0,0,0.15);
-    margin-top: -9px; /* 使圓鈕中心對齊軌道中心 ( (8-26)/2 ) */
-}
-
-/* 4. 修正數字刻度對齊 */
-.tick-marks {
-    display: flex;
-    justify-content: space-between;
-    padding: 0 13px; /* 這裡的 13px 是圓鈕半徑，讓數字對齊圓鈕中心 */
-    margin-top: -5px;
-}
-
-.tick {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    cursor: pointer;
-    width: 0; /* 讓寬度由 flex 均分 */
-    flex: 1;
-}
-
-.tick span {
-    font-size: 0.9rem;
-    color: #adb5bd;
-    font-weight: bold;
-}
+        /* 滑桿與節點設計 */
+        .slider-wrapper { margin-bottom: 30px; position: relative; }
+        .slider-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }
+        .score-display { font-size: 1.4rem; font-weight: 900; padding: 2px 10px; border-radius: 6px; }
+        
+        input[type="range"] { -webkit-appearance: none; width: 100%; height: 10px; border-radius: 5px; background: #eee; outline: none; margin: 15px 0; }
+        input[type="range"]::-webkit-slider-thumb { -webkit-appearance: none; width: 24px; height: 24px; border-radius: 50%; background: #fff; border: 3px solid var(--primary); cursor: pointer; box-shadow: 0 2px 5px rgba(0,0,0,0.2); }
+        
+        .marks { display: flex; justify-content: space-between; padding: 0 5px; font-size: 0.75rem; color: #888; }
+        .sleep-labels { display: flex; justify-content: space-between; margin-top: 5px; font-size: 0.75rem; color: #666; text-align: center; }
+        .sleep-labels span { width: 20%; }
 
 
         /* 按鈕 */
@@ -203,30 +121,20 @@ input[type="range"]::-webkit-slider-thumb {
         <h2>照護導航自我評估</h2>
     </div>
 
-  <div class="card">
-    <h3>1. 體重監測</h3>
- <div class="weight-container">
-    <div class="weight-item">
+ <div class="card">
+        <h3>1. 體重監測</h3>
         <label>原始體重 (kg)</label>
         <input id="oldW" type="number" step="0.1" placeholder="請輸入數值">
-    </div>
-    
-    <div class="weight-item" style="margin-top: 15px;">
         <label>目前體重 (kg)</label>
         <input id="newW" type="number" step="0.1" placeholder="請輸入數值">
+        <label>比較時間範圍</label>
+        <select id="period">
+            <option value="7">一週內</option>
+            <option value="30">一個月內</option>
+            <option value="90">三個月內</option>
+            <option value="180">六個月內</option>
+        </select>
     </div>
-</div>
-
-    
-    <label style="margin-top:10px;">比較時間範圍</label>
-    <select id="period">
-        <option value="7">一週內</option>
-        <option value="30">一個月內</option>
-        <option value="90">三個月內</option>
-        <option value="180">六個月內</option>
-    </select>
-</div>
-
 
     <div class="card">
         <h3>2. 治療副作用（可多選）</h3>
@@ -248,92 +156,43 @@ input[type="range"]::-webkit-slider-thumb {
         
         <div class="slider-wrapper">
             <div class="slider-header">
-                <span class="slider-title">疲憊無力感</span>
-                <span id="txt-f" class="score-badge" style="color:var(--green)">1</span>
+                <span>疲憊無力</span>
+                <span id="txt-fatigue" class="score-display" style="color:var(--green)">1</span>
             </div>
-            <input type="range" id="fatigue" min="1" max="10" value="1" step="1" oninput="upd(this, 'txt-f')">
-            
-            <div class="tick-marks">
-                <div class="tick" onclick="setVal('fatigue', 1, 'txt-f')"><span>1</span></div>
-                <div class="tick" onclick="setVal('fatigue', 2, 'txt-f')"><span>2</span></div>
-                <div class="tick" onclick="setVal('fatigue', 3, 'txt-f')"><span>3</span></div>
-                <div class="tick" onclick="setVal('fatigue', 4, 'txt-f')"><span>4</span></div>
-                <div class="tick" onclick="setVal('fatigue', 5, 'txt-f')"><span>5</span></div>
-                <div class="tick" onclick="setVal('fatigue', 6, 'txt-f')"><span>6</span></div>
-                <div class="tick" onclick="setVal('fatigue', 7, 'txt-f')"><span>7</span></div>
-                <div class="tick" onclick="setVal('fatigue', 8, 'txt-f')"><span>8</span></div>
-                <div class="tick" onclick="setVal('fatigue', 9, 'txt-f')"><span>9</span></div>
-                <div class="tick" onclick="setVal('fatigue', 10, 'txt-f')"><span>10</span></div>
-            </div>
-            <div class="extreme-label"><span>(最低)</span><span>(最高)</span></div>
+            <input type="range" id="fatigue" min="1" max="10" value="1" oninput="updateSlider(this, 'txt-fatigue')">
+            <div class="marks"><span>1 (最低)</span><span>2</span><span>3</span><span>4</span><span>5</span><span>6</span><span>7</span><span>8</span><span>9</span><span>10 (最高)</span></div>
         </div>
 
         <div class="slider-wrapper">
             <div class="slider-header">
-                <span class="slider-title">疼痛程度</span>
-                <span id="txt-p" class="score-badge" style="color:var(--green)">1</span>
+                <span>疼痛程度</span>
+                <span id="txt-pain" class="score-display" style="color:var(--green)">1</span>
             </div>
-            <input type="range" id="pain" min="1" max="10" value="1" step="1" oninput="upd(this, 'txt-p')">
-            <div class="tick-marks">
-                <div class="tick" onclick="setVal('pain', 1, 'txt-p')"><span>1</span></div>
-                <div class="tick" onclick="setVal('pain', 2, 'txt-p')"><span>2</span></div>
-                <div class="tick" onclick="setVal('pain', 3, 'txt-p')"><span>3</span></div>
-                <div class="tick" onclick="setVal('pain', 4, 'txt-p')"><span>4</span></div>
-                <div class="tick" onclick="setVal('pain', 5, 'txt-p')"><span>5</span></div>
-                <div class="tick" onclick="setVal('pain', 6, 'txt-p')"><span>6</span></div>
-                <div class="tick" onclick="setVal('pain', 7, 'txt-p')"><span>7</span></div>
-                <div class="tick" onclick="setVal('pain', 8, 'txt-p')"><span>8</span></div>
-                <div class="tick" onclick="setVal('pain', 9, 'txt-p')"><span>9</span></div>
-                <div class="tick" onclick="setVal('pain', 10, 'txt-p')"><span>10</span></div>
-            </div>
-            <div class="extreme-label"><span>(最低)</span><span>(最高)</span></div>
+            <input type="range" id="pain" min="1" max="10" value="1" oninput="updateSlider(this, 'txt-pain')">
+            <div class="marks"><span>1 (最低)</span><span>2</span><span>3</span><span>4</span><span>5</span><span>6</span><span>7</span><span>8</span><span>9</span><span>10 (最高)</span></div>
         </div>
 
         <div class="slider-wrapper">
             <div class="slider-header">
-                <span class="slider-title">情緒困擾</span>
-                <span id="txt-m" class="score-badge" style="color:var(--green)">1</span>
+                <span>心情溫度計 (情緒困擾)</span>
+                <span id="txt-mood" class="score-display" style="color:var(--green)">1</span>
             </div>
-            <input type="range" id="mood" min="1" max="10" value="1" step="1" oninput="upd(this, 'txt-m')">
-            <div class="tick-marks">
-                <div class="tick" onclick="setVal('mood', 1, 'txt-m')"><span>1</span></div>
-                <div class="tick" onclick="setVal('mood', 2, 'txt-m')"><span>2</span></div>
-                <div class="tick" onclick="setVal('mood', 3, 'txt-m')"><span>3</span></div>
-                <div class="tick" onclick="setVal('mood', 4, 'txt-m')"><span>4</span></div>
-                <div class="tick" onclick="setVal('mood', 5, 'txt-m')"><span>5</span></div>
-                <div class="tick" onclick="setVal('mood', 6, 'txt-m')"><span>6</span></div>
-                <div class="tick" onclick="setVal('mood', 7, 'txt-m')"><span>7</span></div>
-                <div class="tick" onclick="setVal('mood', 8, 'txt-m')"><span>8</span></div>
-                <div class="tick" onclick="setVal('mood', 9, 'txt-m')"><span>9</span></div>
-                <div class="tick" onclick="setVal('mood', 10, 'txt-m')"><span>10</span></div>
-            </div>
-            <div class="extreme-label"><span>(最低)</span><span>(最高)</span></div>
+            <input type="range" id="mood" min="1" max="10" value="1" oninput="updateSlider(this, 'txt-mood')">
+            <div class="marks"><span>1 (最低)</span><span>2</span><span>3</span><span>4</span><span>5</span><span>6</span><span>7</span><span>8</span><span>9</span><span>10 (最高)</span></div>
         </div>
 
-        <div class="slider-wrapper" style="margin-bottom: 20px;">
+        <div class="slider-wrapper">
             <div class="slider-header">
-                <span class="slider-title">睡眠品質</span>
-                <span id="txt-s" class="score-badge" style="color:var(--green)">很好</span>
+                <span>睡眠品質</span>
+                <span id="txt-sleep" class="score-display" style="color:var(--green)">很好</span>
             </div>
-            <input type="range" id="sleep" min="1" max="5" value="5" step="1" oninput="updS(this)">
-            <div class="tick-marks">
-                <div class="tick" onclick="setSleep(1)"><span>1</span></div>
-                <div class="tick" onclick="setSleep(2)"><span>2</span></div>
-                <div class="tick" onclick="setSleep(3)"><span>3</span></div>
-                <div class="tick" onclick="setSleep(4)"><span>4</span></div>
-                <div class="tick" onclick="setSleep(5)"><span>5</span></div>
-            </div>
-            <div class="extreme-label">
-                <span style="width:20%; text-align:center;">很差</span>
-                <span style="width:20%; text-align:center;">差</span>
-                <span style="width:20%; text-align:center;">普通</span>
-                <span style="width:20%; text-align:center;">好</span>
-                <span style="width:20%; text-align:center;">很好</span>
+            <input type="range" id="sleep" min="1" max="5" value="5" oninput="updateSleepSlider(this)">
+            <div class="sleep-labels">
+                <span>很差</span><span>差</span><span>普通</span><span>好</span><span>很好</span>
             </div>
         </div>
     </div>
-
-
+   
 
     <button class="btn-submit" onclick="run()">生成完整評估報告</button>
 
@@ -352,20 +211,6 @@ input[type="range"]::-webkit-slider-thumb {
     </div>
 
     <script>
-        // 點擊數字節點直接設定數值
-    function setVal(id, val, tid) {
-        const el = document.getElementById(id);
-        el.value = val;
-        upd(el, tid);
-    }
-
-    function setSleep(val) {
-        const el = document.getElementById('sleep');
-        el.value = val;
-        updS(el);
-    }
-
-    // 更新顯示與顏色
     function upd(el, tid) {
         let v = parseInt(el.value);
         let t = document.getElementById(tid);
@@ -381,10 +226,9 @@ input[type="range"]::-webkit-slider-thumb {
         let t = document.getElementById('txt-s');
         t.innerText = labels[v];
         if(v >= 4) t.style.color = "var(--green)";
-        else if(v == 3) t.style.color = "var(--orange)";
+        else if(v >= 3) t.style.color = "var(--orange)";
         else t.style.color = "var(--red)";
     }
-
 
     function run() {
         const oW = parseFloat(document.getElementById("oldW").value);
