@@ -57,17 +57,21 @@
         }
 
         /* 輸入框美化 */
-        label { display: block; margin-bottom: 8px; font-weight: 600; font-size: 0.95rem; color: var(--text-gray); }
-        input[type="number"], select { 
-            width: 100%; 
-            padding: 14px; 
-            border: 2px solid #e9ecef; 
-            border-radius: 12px; 
-            font-size: 16px; 
-            transition: all 0.3s;
-            background-color: #f8f9fa;
-        }
-        input:focus { border-color: var(--primary); background-color: #fff; outline: none; }
+label { display: block; margin-bottom: 8px; font-weight: 600; font-size: 0.95rem; color: var(--text-gray); }
+
+input[type="number"], select { 
+    width: 100%; 
+    padding: 14px; 
+    border: 2px solid #e9ecef; 
+    border-radius: 12px; 
+    font-size: 16px; 
+    transition: all 0.3s;
+    background-color: #f8f9fa;
+    /* --- 關鍵修改：加入下面這行 --- */
+    box-sizing: border-box; 
+}
+
+input:focus { border-color: var(--primary); background-color: #fff; outline: none; }
 
         /* 副作用複選框色塊化 */
         .checkbox-grid { display: grid; grid-template-columns: 1fr; gap: 10px; }
@@ -110,43 +114,60 @@
     }
 
     /* 數字節點刻度列 */
-    .tick-marks {
-        display: flex;
-        justify-content: space-between;
-        margin-top: 10px;
-    }
+ /* 1. 重置拉條基礎外觀 */
+input[type="range"] {
+    -webkit-appearance: none; /* 移除 iOS 預設樣式 */
+    width: 100%;
+    background: #e9ecef; /* 未填充時的背景顏色 */
+    height: 8px;
+    border-radius: 10px;
+    outline: none;
+    margin: 20px 0; /* 增加上下間距，避免跟標題太近 */
+}
 
-    .tick {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        cursor: pointer;
-        flex: 1;
-    }
+/* 2. 移除 Safari 滑動時產生的藍色條 (非常重要) */
+input[type="range"]::-webkit-slider-runnable-track {
+    background: #e9ecef; /* 確保軌道背景顏色固定 */
+    height: 8px;
+    border-radius: 10px;
+}
 
-    .tick span {
-        font-size: 0.85rem;
-        color: #888;
-        font-weight: bold;
-        margin-bottom: 4px;
-    }
+/* 3. 美化滑動圓鈕 (Thumb) */
+input[type="range"]::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 26px;
+    height: 26px;
+    background: #ffffff;
+    border: 3px solid var(--primary); /* 使用您的主色調 */
+    border-radius: 50%;
+    cursor: pointer;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.15);
+    margin-top: -9px; /* 使圓鈕中心對齊軌道中心 ( (8-26)/2 ) */
+}
 
-    .tick::after {
-        content: "";
-        width: 2px;
-        height: 6px;
-        background: #ddd;
-        border-radius: 2px;
-    }
+/* 4. 修正數字刻度對齊 */
+.tick-marks {
+    display: flex;
+    justify-content: space-between;
+    padding: 0 13px; /* 這裡的 13px 是圓鈕半徑，讓數字對齊圓鈕中心 */
+    margin-top: -5px;
+}
 
-    .extreme-label {
-        display: flex;
-        justify-content: space-between;
-        margin-top: 5px;
-        font-size: 0.75rem;
-        color: #5c7cfa;
-        font-weight: 600;
-    }
+.tick {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    cursor: pointer;
+    width: 0; /* 讓寬度由 flex 均分 */
+    flex: 1;
+}
+
+.tick span {
+    font-size: 0.9rem;
+    color: #adb5bd;
+    font-weight: bold;
+}
 
 
         /* 按鈕 */
@@ -184,16 +205,18 @@
 
   <div class="card">
     <h3>1. 體重監測</h3>
-    <div class="weight-container">
-        <div class="weight-item">
-            <label>原始體重 (kg)</label>
-            <input id="oldW" type="number" step="0.1" placeholder="數值">
-        </div>
-        <div class="weight-item">
-            <label>目前體重 (kg)</label>
-            <input id="newW" type="number" step="0.1" placeholder="數值">
-        </div>
+ <div class="weight-container">
+    <div class="weight-item">
+        <label>原始體重 (kg)</label>
+        <input id="oldW" type="number" step="0.1" placeholder="請輸入數值">
     </div>
+    
+    <div class="weight-item" style="margin-top: 15px;">
+        <label>目前體重 (kg)</label>
+        <input id="newW" type="number" step="0.1" placeholder="請輸入數值">
+    </div>
+</div>
+
     
     <label style="margin-top:10px;">比較時間範圍</label>
     <select id="period">
@@ -229,6 +252,7 @@
                 <span id="txt-f" class="score-badge" style="color:var(--green)">1</span>
             </div>
             <input type="range" id="fatigue" min="1" max="10" value="1" step="1" oninput="upd(this, 'txt-f')">
+            
             <div class="tick-marks">
                 <div class="tick" onclick="setVal('fatigue', 1, 'txt-f')"><span>1</span></div>
                 <div class="tick" onclick="setVal('fatigue', 2, 'txt-f')"><span>2</span></div>
@@ -286,7 +310,7 @@
             <div class="extreme-label"><span>(最低)</span><span>(最高)</span></div>
         </div>
 
-        <div class="slider-wrapper">
+        <div class="slider-wrapper" style="margin-bottom: 20px;">
             <div class="slider-header">
                 <span class="slider-title">睡眠品質</span>
                 <span id="txt-s" class="score-badge" style="color:var(--green)">很好</span>
@@ -308,6 +332,7 @@
             </div>
         </div>
     </div>
+
 
 
     <button class="btn-submit" onclick="run()">生成完整評估報告</button>
