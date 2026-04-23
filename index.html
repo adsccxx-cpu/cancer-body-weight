@@ -1,8 +1,10 @@
+<script>
 function calc(){
   let oldW = parseFloat(document.getElementById("oldW").value);
   let newW = parseFloat(document.getElementById("newW").value);
   let period = parseInt(document.getElementById("period").value);
 
+  // 防呆
   if (isNaN(oldW) || isNaN(newW)) {
     result.innerHTML = "請輸入完整數據";
     return;
@@ -13,48 +15,41 @@ function calc(){
     return;
   }
 
-  let change = ((newW - oldW) / oldW) * 100;
+  let change = ((newW - oldW) / oldW) * 100; // 正=增加，負=下降
 
   let text = "";
   let risk = "🟢 無顯著風險";
 
-  // === 體重變化判斷 ===
+  // === 體重增加 ===
   if (change > 0) {
     text = "體重變化：+" + change.toFixed(1) + "%（增加）";
-  } else {
+  } 
+  // === 體重下降 ===
+  else {
     let loss = Math.abs(change);
     text = "體重變化：" + loss.toFixed(1) + "%（下降）";
 
-    if (period == 7 && loss > 2) risk = "🔴 高風險（1週 >2%）";
-    else if (period == 30 && loss > 5) risk = "🔴 高風險（1月 >5%）";
-    else if (period == 90 && loss > 7.5) risk = "🟠 中度風險（3月 >7.5%）";
-    else if (period == 180 && loss > 10) risk = "🔴 高風險（6月 >10%）";
-    else if (loss > 2) risk = "🟡 輕度風險（需追蹤）";
+    // 期間特異判斷
+    if (period == 7 && loss > 2) {
+      risk = "🔴 高風險（1週 >2%）";
+    } 
+    else if (period == 30 && loss > 5) {
+      risk = "🔴 高風險（1個月 >5%）";
+    } 
+    else if (period == 90 && loss > 7.5) {
+      risk = "🟠 中度風險（3個月 >7.5%）";
+    } 
+    else if (period == 180 && loss > 10) {
+      risk = "🔴 高風險（6個月 >10%）";
+    } 
+    else if (loss > 2) {
+      risk = "🟡 輕度風險（需追蹤）";
+    }
   }
 
-  // === 取得症狀 ===
-  let checked = document.querySelectorAll('input[type="checkbox"]:checked');
-  let advice = "";
-
-  // === 建議庫（重點：可擴充）===
-  const adviceMap = {
-    appetite: "• 少量多餐，每2-3小時進食<br>• 使用高熱量高蛋白點心（如豆漿、優格）",
-    nausea: "• 避免油膩與氣味重食物<br>• 少量多餐，餐前避免空腹過久",
-    mouth: "• 選擇軟質、溫涼食物（如布丁、蒸蛋）<br>• 避免酸辣與刺激性食物",
-    diarrhea: "• 避免高油與高纖食物<br>• 補充水分與電解質",
-    constipation: "• 增加水分攝取<br>• 適量膳食纖維（若無腸阻塞）",
-    taste: "• 使用香料或檸檬調味<br>• 嘗試冷食減少異味"
-  };
-
-  // === 組合建議 ===
-  checked.forEach(item => {
-    advice += "<br><b>" + item.parentElement.innerText + "</b><br>";
-    advice += adviceMap[item.value] + "<br>";
-  });
-
-  // === 輸出 ===
   document.getElementById("result").innerHTML =
     text + "<br><br>" +
     "風險判讀：" + risk + "<br><br>" +
-    (advice ? "<b>副作用改善建議：</b>" + advice : "");
+    "建議：持續監測體重變化，必要時轉介營養評估";
 }
+</script>
