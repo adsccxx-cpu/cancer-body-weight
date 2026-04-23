@@ -56,7 +56,7 @@
             border-radius: 10px;
         }
 
-                /* 體重與下拉選單 */
+        /* 體重與下拉選單 */
         label { display: block; margin: 15px 0 5px; font-weight: bold; font-size: 0.95rem; }
         input[type="number"], select { width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 10px; font-size: 16px; box-sizing: border-box; background: #fff; }
         
@@ -86,7 +86,6 @@
         .marks { display: flex; justify-content: space-between; padding: 0 5px; font-size: 0.75rem; color: #888; }
         .sleep-labels { display: flex; justify-content: space-between; margin-top: 5px; font-size: 0.75rem; color: #666; text-align: center; }
         .sleep-labels span { width: 20%; }
-
 
         /* 按鈕 */
         .btn-submit { 
@@ -121,7 +120,7 @@
         <h2>照護導航自我評估</h2>
     </div>
 
- <div class="card">
+    <div class="card">
         <h3>1. 體重監測</h3>
         <label>原始體重 (kg)</label>
         <input id="oldW" type="number" step="0.1" placeholder="請輸入數值">
@@ -204,29 +203,32 @@
             <div id="w-risk" style="margin-top:10px; font-weight:bold;"></div>
         </div>
 
-        <div class="advice-section" id="advice-content">
-            </div>
+        <div class="advice-section" id="advice-content"></div>
 
         <div id="emergency-area"></div>
     </div>
 
     <script>
-    function upd(el, tid) {
+    // 修正：函數名稱與 HTML input 上的 oninput 呼叫一致
+    function updateSlider(el, tid) {
         let v = parseInt(el.value);
         let t = document.getElementById(tid);
         t.innerText = v;
+        // 變色邏輯：1-3綠, 4-6橘, 7-10紅
         if(v <= 3) t.style.color = "var(--green)";
         else if(v <= 6) t.style.color = "var(--orange)";
         else t.style.color = "var(--red)";
     }
 
-    function updS(el) {
+    // 修正：睡眠品質函數與顏色對應
+    function updateSleepSlider(el) {
         const labels = ["", "很差", "差", "普通", "好", "很好"];
         let v = parseInt(el.value);
-        let t = document.getElementById('txt-s');
+        let t = document.getElementById('txt-sleep');
         t.innerText = labels[v];
+        // 變色邏輯：4-5綠, 3橘, 1-2紅
         if(v >= 4) t.style.color = "var(--green)";
-        else if(v >= 3) t.style.color = "var(--orange)";
+        else if(v == 3) t.style.color = "var(--orange)";
         else t.style.color = "var(--red)";
     }
 
