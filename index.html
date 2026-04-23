@@ -3,48 +3,91 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>癌症治療症狀評估</title>
+    <title>癌症營養與症狀自我評估</title>
     <style>
-        body { font-family: sans-serif; padding: 20px; line-height: 1.6; max-width: 500px; margin: auto; }
-        .input-group { margin-bottom: 15px; padding: 10px; border: 1px solid #eee; border-radius: 5px; }
-        #result { margin-top: 20px; padding: 15px; border-radius: 5px; background-color: #f0f7ff; min-height: 50px; }
-        button { width: 100%; padding: 10px; background: #007bff; color: white; border: none; border-radius: 5px; cursor: pointer; }
+        :root {
+            --primary: #4a90e2;
+            --danger: #e74c3c;
+            --warning: #f39c12;
+            --success: #2ecc71;
+            --bg: #f5f7fa;
+        }
+        body { font-family: -apple-system, "Noto Sans TC", sans-serif; background: var(--bg); color: #333; margin: 0; padding: 15px; }
+        .card { background: white; border-radius: 15px; padding: 20px; margin-bottom: 15px; box-shadow: 0 2px 10px rgba(0,0,0,0.05); }
+        h2 { color: var(--primary); text-align: center; margin-bottom: 25px; }
+        h3 { border-left: 4px solid var(--primary); padding-left: 10px; font-size: 1.1rem; margin-top: 0; }
+        
+        /* 表單元素美化 */
+        label { display: block; margin: 10px 0 5px; font-weight: bold; }
+        input[type="number"], select { width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 8px; font-size: 16px; box-sizing: border-box; }
+        
+        /* 複選框美化 */
+        .checkbox-group { display: flex; flex-direction: column; gap: 10px; }
+        .checkbox-item { background: #f9f9f9; padding: 12px; border-radius: 8px; display: flex; align-items: center; cursor: pointer; }
+        .checkbox-item input { margin-right: 12px; transform: scale(1.3); }
+
+        /* 滑桿美化 */
+        .slider-container { margin: 20px 0; }
+        input[type="range"] { width: 100%; height: 8px; border-radius: 5px; background: #ddd; outline: none; transition: 0.2s; margin: 10px 0; }
+        .slider-val { float: right; color: var(--primary); font-weight: bold; }
+
+        button { width: 100%; padding: 15px; background: var(--primary); color: white; border: none; border-radius: 30px; font-size: 18px; font-weight: bold; margin-top: 10px; cursor: pointer; box-shadow: 0 4px 15px rgba(74,144,226,0.3); }
+        
+        /* 結果呈現 */
+        #result { display: none; margin-top: 20px; }
+        .risk-badge { display: inline-block; padding: 5px 15px; border-radius: 20px; color: white; font-weight: bold; margin: 10px 0; }
+        .standard-box { background: #eee; padding: 12px; border-radius: 8px; font-size: 0.85rem; color: #666; margin-top: 15px; }
     </style>
 </head>
 <body>
 
-    <h2>症狀評估工具</h2>
+    <h2>照護小助手</h2>
 
-    <div class="input-group">
-        <label>原始體重 (kg):</label> <input id="oldW" type="number" step="0.1"><br>
-        <label>目前體重 (kg):</label> <input id="newW" type="number" step="0.1"><br>
-        <label>時間範圍:</label>
+    <div class="card">
+        <h3>1. 體重變化監測</h3>
+        <label>原始體重 (kg)</label>
+        <input id="oldW" type="number" step="0.1" placeholder="請輸入治療前體重">
+        <label>目前體重 (kg)</label>
+        <input id="newW" type="number" step="0.1" placeholder="請輸入本次測量體重">
+        <label>比較時間範圍</label>
         <select id="period">
-            <option value="7">7天</option>
-            <option value="30">30天</option>
-            <option value="90">90天</option>
-            <option value="180">180天</option>
+            <option value="7">一週內</option>
+            <option value="30">一個月內</option>
+            <option value="90">三個月內</option>
+            <option value="180">六個月內</option>
         </select>
     </div>
 
-    <div class="input-group">
-        <label>癌症治療相關症狀（可複選）：</label><br>
-        <label><input type="checkbox" value="appetite"> 食慾不振</label><br>
-        <label><input type="checkbox" value="nausea"> 噁心 / 嘔吐</label><br>
-        <label><input type="checkbox" value="mouth"> 口腔潰瘍</label><br>
-        <label><input type="checkbox" value="diarrhea"> 腹瀉</label><br>
-        <label><input type="checkbox" value="constipation"> 便秘</label><br>
-        <label><input type="checkbox" value="taste"> 味覺改變</label><br>
-        <label><input type="checkbox" value="dry"> 口乾</label><br>
-        <label><input type="checkbox" value="bloating"> 腹脹</label><br>
-        <label><input type="checkbox" value="tube"> 灌食管路阻塞或滲漏</label>
+    <div class="card">
+        <h3>2. 治療副作用（可多選）</h3>
+        <div class="checkbox-group">
+            <label class="checkbox-item"><input type="checkbox" value="appetite"> 食慾不振</label>
+            <label class="checkbox-item"><input type="checkbox" value="dry"> 口乾</label>
+            <label class="checkbox-item"><input type="checkbox" value="mouth"> 口腔潰瘍</label>
+            <label class="checkbox-item"><input type="checkbox" value="taste"> 味覺改變</label>
+            <label class="checkbox-item"><input type="checkbox" value="nausea"> 噁心 / 嘔吐</label>
+            <label class="checkbox-item"><input type="checkbox" value="bloating"> 腹脹</label>
+            <label class="checkbox-item"><input type="checkbox" value="diarrhea"> 腹瀉</label>
+            <label class="checkbox-item"><input type="checkbox" value="constipation"> 便秘</label>
+            <label class="checkbox-item"><input type="checkbox" value="tube"> 灌食管路問題</label>
+        </div>
     </div>
 
-    <div class="input-group">
-        疲憊無力 (1-10): <input id="fatigue" type="number" min="1" max="10" value="1"><br>
-        疼痛狀況 (1-10): <input id="pain" type="number" min="1" max="10" value="1"><br>
-        情緒困擾 (1-10): <input id="mood" type="number" min="1" max="10" value="1"><br>
-        睡眠品質: 
+    <div class="card">
+        <h3>3. 身心狀態評分 (0-10)</h3>
+        <div class="slider-container">
+            疲憊無力 <span class="slider-val" id="v-fatigue">0</span>
+            <input type="range" id="fatigue" min="0" max="10" value="0" oninput="document.getElementById('v-fatigue').innerText=this.value">
+        </div>
+        <div class="slider-container">
+            疼痛程度 <span class="slider-val" id="v-pain">0</span>
+            <input type="range" id="pain" min="0" max="10" value="0" oninput="document.getElementById('v-pain').innerText=this.value">
+        </div>
+        <div class="slider-container">
+            情緒困擾 <span class="slider-val" id="v-mood">0</span>
+            <input type="range" id="mood" min="0" max="10" value="0" oninput="document.getElementById('v-mood').innerText=this.value">
+        </div>
+        <label>睡眠品質</label>
         <select id="sleep">
             <option value="5">很好</option>
             <option value="4">好</option>
@@ -54,81 +97,89 @@
         </select>
     </div>
 
-    <button onclick="calc()">點我計算結果</button>
+    <button onclick="calc()">查看評估報告</button>
 
-    <div id="result">結果會顯示在這裡</div>
+    <div id="result" class="card">
+        <h3 style="border-color: #2ecc71;">評估結果報告</h3>
+        <div id="summary"></div>
+        <hr>
+        <div id="detail-advice"></div>
+        
+        <div class="standard-box">
+            <b>📊 計算標準說明：</b><br>
+            • <b>高風險：</b>一週瘦 >2%、一月 >5%、六月 >10%。<br>
+            • <b>意義：</b>體重快速流失會降低免疫力與耐受力，建議優先諮詢營養師。
+        </div>
+    </div>
 
     <script>
     function calc() {
-        // 抓取元素
         const oldW = parseFloat(document.getElementById("oldW").value);
         const newW = parseFloat(document.getElementById("newW").value);
         const period = parseInt(document.getElementById("period").value);
-        const result = document.getElementById("result");
-
-        // 檢查體重是否有填寫
+        
         if (isNaN(oldW) || isNaN(newW)) {
-            result.innerHTML = "<b style='color:red;'>請輸入完整體重資料</b>";
+            alert("請先輸入體重數值喔！");
             return;
         }
 
-        // 體重邏輯
         let change = ((newW - oldW) / oldW) * 100;
-        let text = "";
-        let risk = "🟢 無顯著風險";
+        let riskText = "🟢 穩定狀態";
+        let riskColor = "#2ecc71";
+        let loss = Math.abs(change);
+        let isHighRisk = false;
 
-        if (change > 0) {
-            text = "體重變化：+" + change.toFixed(1) + "%（增加）";
-        } else {
-            let loss = Math.abs(change);
-            text = "體重變化：" + loss.toFixed(1) + "%（下降）";
-            if (period == 7 && loss > 2) risk = "🔴 高風險";
-            else if (period == 30 && loss > 5) risk = "🔴 高風險";
-            else if (period == 90 && loss > 7.5) risk = "🟠 中度風險";
-            else if (period == 180 && loss > 10) risk = "🔴 高風險";
-            else if (loss > 2) risk = "🟡 輕度風險";
+        // 風險判定
+        if (change < 0) {
+            if ((period == 7 && loss > 2) || (period == 30 && loss > 5) || (period == 180 && loss > 10)) {
+                riskText = "🔴 高風險狀態";
+                riskColor = "#e74c3c";
+                isHighRisk = true;
+            } else if (loss > 2) {
+                riskText = "🟡 注意狀態";
+                riskColor = "#f39c12";
+            }
         }
 
         // 症狀建議
         const adviceMap = {
-            appetite: "少量多餐，增加高熱量高蛋白食物",
-            nausea: "避免油膩與氣味強食物，少量多餐",
-            mouth: "選擇軟質溫涼食物，避免刺激",
-            diarrhea: "低油低纖，補充水分與電解質",
-            constipation: "增加水分與適量纖維",
-            taste: "調整調味，嘗試冷食",
-            dry: "小口頻繁喝水，可含冰塊或無糖口含錠",
-            bloating: "避免產氣食物，少量多餐",
-            tube: "檢查管路位置與清潔，必要時請醫護處理"
+            appetite: "建議少量多餐，補充高蛋白點心（如布丁、豆漿）。",
+            dry: "小口頻繁飲水，或使用無糖口含錠刺激唾液。",
+            mouth: "選擇軟質溫涼食物，避免辛辣、酸味或粗糙食物。",
+            taste: "嘗試使用檸檬或香料提味，或嘗試冷食改善金屬味。",
+            nausea: "避免油膩與氣味重食物，餐後不要立刻平躺。",
+            bloating: "減少產氣食物（如豆類、洋蔥），放慢進食速度。",
+            diarrhea: "採低纖飲食（如白米、吐司），注意補充電解質水。",
+            constipation: "在體力許可下增加水分攝取與散步運動。",
+            tube: "請檢查管路有無折損，若有滲漏請聯繫醫護。"
         };
 
-        let advice = "";
-        let emergency = false;
+        let adviceHtml = "";
         let checked = document.querySelectorAll('input[type="checkbox"]:checked');
-
         checked.forEach(item => {
-            let key = item.value;
-            advice += `<br><b>${item.parentElement.innerText.trim()}</b>：${adviceMap[key]}`;
-            if (key === "nausea" || key === "diarrhea") emergency = true;
+            adviceHtml += `<li><b>${item.parentElement.innerText.trim()}：</b>${adviceMap[item.value]}</li>`;
         });
 
-        // 量表評分
+        // 拉條數值
         let fatigue = parseInt(document.getElementById("fatigue").value);
         let pain = parseInt(document.getElementById("pain").value);
         let mood = parseInt(document.getElementById("mood").value);
-        let sleep = parseInt(document.getElementById("sleep").value);
+        
+        if (fatigue >= 7) adviceHtml += "<li>⚠️ <b>疲憊感重：</b>建議增加午間歇息，並與醫師討論貧血可能。</li>";
+        if (pain >= 7) adviceHtml += "<li>⚠️ <b>疼痛明顯：</b>請記錄疼痛性質，並按時服用醫師開立藥物。</li>";
+        if (isHighRisk) {
+            adviceHtml += "<li style='color:#e74c3c;'>🚨 <b>體重流失過快建議：</b>建議主動聯繫營養師，評估是否需搭配營養補充品。</li>";
+        }
 
-        if (fatigue >= 7) advice += "<br>⚠️ 疲憊較高，建議增加休息與營養補充";
-        if (pain >= 7) advice += "<br>⚠️ 疼痛偏高，建議醫療評估";
-        if (mood >= 7) advice += "<br>⚠️ 情緒困擾偏高，建議心理或醫療評估";
-        if (sleep <= 2) advice += "<br>⚠️ 睡眠品質差，建議改善作息或評估";
-
-        // 警語
-        let warning = "<br><br><b>💡 建議：</b>建議轉介營養師或醫療團隊";
-        if (emergency) warning += "<br><b style='color:red;'>🚨 嘔吐或腹瀉症狀，請立即就醫</b>";
-
-        // 輸出
-        result.innerHTML = text + "<br>風險判讀：" + risk + "<br>" + (advice ? "<br><b>症狀建議：</b>" + advice : "") + warning;
+        // 顯示結果
+        document.getElementById("summary").innerHTML = `
+            體重變化：<span style="font-size:1.2rem; font-weight:bold;">${change.toFixed(1)}%</span><br>
+            判定結果：<span class="risk-badge" style="background:${riskColor}">${riskText}</span>
+        `;
+        document.getElementById("detail-advice").innerHTML = adviceHtml ? `<b>建議對策：</b><ul>${adviceHtml}</ul>` : "目前狀態良好，請繼續保持！";
+        
+        document.getElementById("result").style.display = "block";
+        window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });
     }
     </script>
 </body>
