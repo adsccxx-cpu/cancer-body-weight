@@ -155,7 +155,7 @@
         
         <div class="slider-wrapper">
             <div class="slider-header">
-                <span>疲憊無力</span>
+                <span>疲憊程度</span>
                 <span id="txt-fatigue" class="score-display" style="color:var(--green)">1</span>
             </div>
             <input type="range" id="fatigue" min="1" max="10" value="1" oninput="updateSlider(this, 'txt-fatigue')">
@@ -258,15 +258,15 @@
 
         // 建議清單
         const maps = {
-            appetite: "少量多餐（一日6-8餐），選擇高熱量高蛋白食物，如布丁、堅果奶。",
-            dry: "小口頻繁喝水，或含冰塊、無糖糖果刺激唾液，避免過鹹食物。",
-            mouth: "選擇溫涼軟質食物（如蒸蛋、稀飯），避開酸性與粗糙口感。",
+            appetite: "少量多餐（一日6-8餐），選擇高熱量高蛋白食物，如肉包、加料豆花、南瓜堅果豆漿、酪梨牛奶、營養品等。",
+            dry: "小口頻繁喝水，或含冰塊刺激唾液，選擇勾芡食物如燴飯、濃湯、藕粉羹，避免過鹹加工食品。",
+            mouth: "選擇溫涼軟質食物（如蒸蛋、小米粥、木瓜牛奶、銀耳湯），避開酸性與粗糙口感。",
             taste: "嘗試檸檬汁或香料提味，若有金屬感可改用塑膠或木質餐具。",
             nausea: "避免油膩與重味食物，進食後一小時不平躺，維持空氣流通。",
-            bloating: "避開產氣食物（豆類、十字花科），餐後適度緩步活動。",
-            diarrhea: "採低纖飲食（白米飯、去皮雞肉），補充電解質避免脫水。",
-            constipation: "增加水分與適量水溶性纖維，在體力允許下散步。",
-            tube: "檢查管路是否彎折，若有滲漏或阻塞，請立即聯繫醫護處理。"
+            bloating: "避開產氣食物（豆類、洋蔥、馬鈴薯、碳酸飲料），餐後適度緩步活動。",
+            diarrhea: "採少油低纖飲食（白米飯、白吐司、去皮雞肉、雞蛋粥），補充充足水份，避免脫水。暫停牛奶，注意食物衛生。若為腸造口管灌飲食可降低流速、選擇低渣配方",
+            constipation: "增加水分與適量水溶性纖維，如菇類、木瓜、蘋果、奇異果、火龍果，在體力允許下增加散步次數。",
+            tube: "檢查管路是否彎折，若有滲漏或阻塞，請立即聯繫醫護人員處理。"
         };
 
         let html = "";
@@ -282,15 +282,15 @@
 
         if (f >= 4) html += `<div class="advice-item"><b>疲憊無力建議</b>${f >= 7 ? '<span class="urgent">您的疲憊程度較高，請務必主動告知個管師或醫護人員。</span>' : '調整作息，採取節能方式活動，少量多次休息。'}</div>`;
         if (pa >= 4) html += `<div class="advice-item"><b>疼痛處置建議</b>${pa >= 7 ? '<span class="urgent">疼痛已達重度，建議立即回診或連繫醫療團隊調整止痛藥物。</span>' : '記錄疼痛部位與頻率，並按時服用處方藥物。'}</div>`;
-        if (m >= 4) html += `<div class="advice-item"><b>情緒調適建議</b>${m >= 7 ? '<span class="urgent">情緒壓力沉重，建議告知醫護團隊尋求個管師轉介心理師。</span>' : '嘗試深呼吸練習，或與信任的親友分享您的心情。'}</div>`;
-        if (s <= 3) html += `<div class="advice-item"><b>睡眠改善建議</b>${s <= 2 ? '<span class="urgent">睡眠問題嚴重，建議主動告知醫師評估輔助改善方案。</span>' : '減少午睡時間，並在睡前維持放鬆環境。'}</div>`;
+        if (m >= 4) html += `<div class="advice-item"><b>情緒調適建議</b>${m >= 7 ? '<span class="urgent">情緒壓力沉重，建議告知醫護團隊評估轉介心理師。</span>' : '嘗試深呼吸練習，或與信任的親友分享您的心情。'}</div>`;
+        if (s <= 3) html += `<div class="advice-item"><b>睡眠改善建議</b>${s <= 2 ? '<span class="urgent">睡眠問題嚴重，建議主動告知醫師評估輔助改善方案。</span>' : '增加白天活動，減少午睡時間，並在睡前維持放鬆環境。'}</div>`;
 
         document.getElementById("advice-content").innerHTML = html || "<div class='advice-item'>目前狀態良好，請繼續保持觀察。</div>";
         
         let em = "";
-        if (isHR) em += "<li>體重流失過快，建議優先預約營養師諮詢。</li>";
+        if (isHR) em += "<li>體重流失過快，建議預約營養師諮詢。</li>";
         if (document.querySelector('input[value="nausea"]:checked') || document.querySelector('input[value="diarrhea"]:checked')) {
-            em += "<li>若出現連續嘔吐或腹瀉，請立即就醫以防脫水。</li>";
+            em += "<li>若出現連續兩天嘔吐或腹瀉，請立即就醫以防脫水。</li>";
         }
         document.getElementById("emergency-area").innerHTML = em ? `<div class="urgent" style="background:#fff0f0; padding:15px; border-radius:12px; margin-top:20px;">🚨 重要提醒：<ul style="margin:5px 0;">${em}</ul></div>` : "";
 
